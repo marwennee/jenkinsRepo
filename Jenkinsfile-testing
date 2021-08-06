@@ -7,14 +7,10 @@ pipeline {
     }
         agent {
         kubernetes {
-            defaultContainer 'jnlp'
-            yaml """
-                    apiVersion: v1
-                    kind: Pod
-                    metadata:
-                    labels:
-                        some-label: pod
-                    spec:
+                kubernetes {
+                inheritFrom 'mypod'
+                yaml '''
+                spec:
                     containers:
                         - name: docker
                         image: docker:19.03
@@ -34,7 +30,9 @@ pipeline {
                         - name: dockersock
                         hostPath:
                             path: /var/run/docker.sock
-            """
+                    '''
+                }
+
         }
     }
     stages {
