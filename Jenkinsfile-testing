@@ -71,9 +71,9 @@ pipeline {
                 container('helm') {
                     script {
                         try {
-                            sh "helm upgrade --set image.tag=${VERSION}  ${NAME} ./${HELM_FOLDER}"
+                            sh "helm upgrade --force --set image.tag=${VERSION}  ${NAME} ./${HELM_FOLDER}"
                         } catch( Exception e){
-                            sh "helm install --set image.tag=${VERSION} --create-namespace ${NAME} ./${HELM_FOLDER}"
+                            sh "helm install --force --set image.tag=${VERSION} --create-namespace ${NAME} ./${HELM_FOLDER}"
                         }
                     }
                     
