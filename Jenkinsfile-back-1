@@ -1,32 +1,51 @@
 pipeline {
     environment {
-        DEPLOY = "${env.BRANCH_NAME == "main" || env.BRANCH_NAME == "develop" ? "true" : "false"}"
-        NAME = "back-service-1"
+        NAME = "back--svc--1"
+        NAMESPACE = "testing"
         VERSION = env.GIT_COMMIT.take(7)
         REGISTRY = 'marwenguesmii/nodejsapp'
         REGISTRY_CREDENTIAL = 'dockerhub'
+        HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
+        HELM_FOLDER = "helm-back-1"
     }
     agent {
         kubernetes {
-            defaultContainer 'jnlp'
-            yamlFile 'build.yaml'
+            yaml '''
+                spec:
+                    containers:
+                        - name: docker
+                          image: docker:19.03
+                          command:
+                            - cat
+                          tty: true
+                          privileged: true
+                          volumeMounts:
+                            - name: dockersock
+                              mountPath: /var/run/docker.sock
+                        - name: helm
+                          image: alpine/helm:3.6.3
+                          command:
+                            - cat
+                          tty: true
+                    volumes:
+                        - name: dockersock
+                          hostPath:
+                            path: /var/run/docker.sock
+                '''
         }
     }
+
     stages {
         stage('Docker Build') {
-            when {
-                environment name: 'DEPLOY', value: 'true'
-            }
+
             steps {
                 container('docker') {
                     sh "docker build -t ${REGISTRY}:${VERSION} ."
                 }
             }
         }
+
         stage('Docker Publish') {
-            when {
-                environment name: 'DEPLOY', value: 'true'
-            }
             steps {
                 container('docker') {
                     withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
@@ -35,15 +54,31 @@ pipeline {
                 }
             }
         }
-        stage('Kubernetes Deploy') {
-            when {
-                environment name: 'DEPLOY', value: 'true'
-            }
+
+        stage('Checkout SCM: HELM CHART'){
             steps {
-                container('helm') {
-                    sh "helm upgrade --install --force --set image.tag=${VERSION}  ${NAME} ./helm"
-                }
+                checkout(scm: [
+                    $class: 'GitSCM', branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: "${HELM_REPO}", name: "origin", credentialsId:'github']]
+                ])
             }
         }
+
+        stage('Kubernetes Deploy') {
+            steps {
+                container('helm') {
+                    script {
+                        try {
+                            sh "helm upgrade --force --set image.tag=${VERSION} -n ${NAMESPACE}  ${NAME} ./${HELM_FOLDER}"
+                        } catch( Exception e){
+                            sh "helm install --replace --set image.tag=${VERSION} --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ./${HELM_FOLDER}"
+                        }
+                    }
+                    
+                }
+            }
+        }        
+
+
     }
 }
