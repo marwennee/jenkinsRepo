@@ -1,0 +1,19 @@
+pipeline {
+    environment {
+        NAME = "front-service"
+        VERSION = env.GIT_COMMIT.take(7)
+        REGISTRY = 'marwenguesmii/angular_nginx'
+        REGISTRY_CREDENTIAL = 'dockerhub'
+    }
+    stages {
+        stage('Docker Build') {
+
+            steps {
+                container('docker') {
+                    sh "docker image ls"
+                }
+            }
+        }
+
+    }
+}
