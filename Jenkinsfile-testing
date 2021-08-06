@@ -44,9 +44,12 @@ pipeline {
                     $class: 'GitSCM', branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: "${PROJECT_REPO}", name: "origin", credentialsId:'github']]
                 ])
+                checkout(scm: [
+                    $class: 'GitSCM', branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: "${HELM_REPO}", name: "origin", credentialsId:'github']]
+                ])
 
             }
-
         }
         stage('Docker Build') {
 
