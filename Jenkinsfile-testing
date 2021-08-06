@@ -7,7 +7,6 @@ pipeline {
     }
     agent {
         kubernetes {
-            inheritFrom 'mypod'
             yaml '''
                 spec:
                     containers:
@@ -30,6 +29,14 @@ pipeline {
                           hostPath:
                             path: /var/run/docker.sock
                 '''
+        }
+    }
+
+    stages {
+        stage('GIT CHECKOUT'){
+            git branch: 'main',
+                credentialsId: 'github',
+                url: 'https://github.com/marwennee/front-service'
         }
     }
 
