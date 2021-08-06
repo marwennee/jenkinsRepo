@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        NAME = "front-service"
+        NAME = "front--svc"
         VERSION = env.GIT_COMMIT.take(7)
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
