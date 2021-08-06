@@ -34,9 +34,10 @@ pipeline {
 
     stages {
         stage('GIT CHECKOUT'){
-            git branch: 'main',
-                credentialsId: 'github',
-                url: 'https://github.com/marwennee/front-service'
+            withCredentials([gitUsernamePassword(credentialsId: 'github',
+                             gitToolName: 'git-tool')]) {
+                sh "git clone https://github.com/marwennee/front-service"
+            }
         }
     }
 
