@@ -42,7 +42,7 @@ pipeline {
                                 gitToolName: 'git-tool')]) {
                     sh "git clone ${PROJECT_REPO}"
                     sh "git clone ${HELM_REPO}"
-                    SH "ls -l"
+                    sh "ls -l"
                 }
             }
 
