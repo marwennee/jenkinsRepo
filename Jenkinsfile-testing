@@ -4,6 +4,9 @@ pipeline {
         VERSION = env.GIT_COMMIT.take(7)
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
+        HELM_REPO = "https://github.com/marwennee/HelmCharts"
+        PROJECT_REPO = "https://github.com/marwennee/front-service"
+        HELM_FOLDER = "helm-front"
     }
     agent {
         kubernetes {
@@ -33,13 +36,13 @@ pipeline {
     }
 
     stages {
-        stage('GIT CHECKOUT'){
+        stage('Declarative: Checkout SCM'){
             steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'github',
                                 gitToolName: 'git-tool')]) {
-                sh "git clone https://github.com/marwennee/front-service"
-                sh "ls -l"
-            }
+                    sh "git clone ${PROJECT_REPO}"
+                    sh "git clone ${HELM_REPO}"
+                }
             }
 
         }
