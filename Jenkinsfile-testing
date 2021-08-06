@@ -40,8 +40,14 @@ pipeline {
     stages {
         stage('Checkout SCM: PROJECT & HELM'){
             steps {
-                checkout([$class: 'GitSCM', source: "${PROJECT_REPO}", credentialsId:"github"])
-                checkout([$class: 'GitSCM', source: "${HELM_REPO}", credentialsId:"github"])
+                checkout([
+                    $class: 'GitSCM', branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: "${PROJECT_REPO}"],[credentialsId:'github']]
+                ])
+                checkout([
+                    $class: 'GitSCM', branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: "${HELM_REPO}"],[credentialsId:'github']]
+                ])
             }
 
         }
