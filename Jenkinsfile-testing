@@ -5,11 +5,10 @@ pipeline {
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
     }
-        agent {
+    agent {
         kubernetes {
-                kubernetes {
-                inheritFrom 'mypod'
-                yaml '''
+            inheritFrom 'mypod'
+            yaml '''
                 spec:
                     containers:
                         - name: docker
@@ -30,11 +29,10 @@ pipeline {
                         - name: dockersock
                         hostPath:
                             path: /var/run/docker.sock
-                    '''
-                }
-
+                '''
         }
     }
+    
     stages {
         stage('Docker Build') {
 
