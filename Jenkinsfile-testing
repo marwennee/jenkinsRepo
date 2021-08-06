@@ -1,6 +1,7 @@
 pipeline {
     environment {
         NAME = "front--svc"
+        NAMESPACE = "testing"
         VERSION = env.GIT_COMMIT.take(7)
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
@@ -73,7 +74,7 @@ pipeline {
                         try {
                             sh "helm upgrade --force --set image.tag=${VERSION}  ${NAME} ./${HELM_FOLDER}"
                         } catch( Exception e){
-                            sh "helm install --replace --set image.tag=${VERSION} --create-namespace ${NAME} ./${HELM_FOLDER}"
+                            sh "helm install --replace --set image.tag=${VERSION} --set metadata.namespace = ${NAMESPACE} --create-namespace -n ${NAME} ./${HELM_FOLDER}"
                         }
                     }
                     
