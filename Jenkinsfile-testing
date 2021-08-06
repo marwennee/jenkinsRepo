@@ -7,8 +7,7 @@ pipeline {
         REGISTRY_CREDENTIAL = 'dockerhub'
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
         PROJECT_REPO = "https://github.com/marwennee/front-service.git"
-        HELM_FOLDER = "HelmCharts/helm-front"
-        PROJECT_FOLDER = "front-service"
+        HELM_FOLDER = "helm-front"
     }
     agent {
         kubernetes {
@@ -38,24 +37,19 @@ pipeline {
     }
 
     stages {
-        stage('Checkout SCM: PROJECT & HELM'){
+        stage('Checkout SCM: PROJECT CODE'){
             steps {
                 checkout(scm: [
                     $class: 'GitSCM', branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: "${PROJECT_REPO}", name: "origin", credentialsId:'github']]
                 ])
-                checkout(scm: [
-                    $class: 'GitSCM', branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: "${HELM_REPO}", name: "origin", credentialsId:'github']]
-                ])
-            sh "ls -l"
             }
         }
         stage('Docker Build') {
 
             steps {
                 container('docker') {
-                    sh "docker build -t ${REGISTRY}:${VERSION} ./${PROJECT_FOLDER}"
+                    sh "docker build -t ${REGISTRY}:${VERSION} ."
                 }
             }
         }
@@ -67,6 +61,15 @@ pipeline {
                         sh "docker push ${REGISTRY}:${VERSION}"
                     }
                 }
+            }
+        }
+
+        stage('Checkout SCM: HELM CHART'){
+            steps {
+                checkout(scm: [
+                    $class: 'GitSCM', branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: "${HELM_REPO}", name: "origin", credentialsId:'github']]
+                ])
             }
         }
 
