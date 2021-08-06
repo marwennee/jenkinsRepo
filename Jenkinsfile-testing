@@ -37,19 +37,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout SCM: PROJECT CODE'){
-            steps {
-                checkout(scm: [
-                    $class: 'GitSCM', branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: "${PROJECT_REPO}", name: "origin", credentialsId:'github']]
-                ])
-                script {
-                    sh "git rev-parse --short HEAD > .git/commit-id"                        
-                    VERSION = readFile('.git/commit-id').trim()
-                }
-
-            }
-        }
         stage('Docker Build') {
 
             steps {
