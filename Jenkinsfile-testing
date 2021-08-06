@@ -69,7 +69,7 @@ pipeline {
         stage('Kubernetes Deploy') {
             steps {
                 container('helm') {
-                    sh "helm upgrade --install --force --set image.tag=${VERSION}  ${NAME} ./${HELM_FOLDER}"
+                    sh "helm upgrade --install --force --set image.tag=${VERSION} --namespace testing --create-namespace  ${NAME} ./${HELM_FOLDER}"
                 }
             }
         }        
