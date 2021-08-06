@@ -6,7 +6,6 @@ pipeline {
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
-        PROJECT_REPO = "https://github.com/marwennee/front-service.git"
         HELM_FOLDER = "helm-front"
     }
     agent {
