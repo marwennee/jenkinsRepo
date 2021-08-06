@@ -12,27 +12,27 @@ pipeline {
                 spec:
                     containers:
                         - name: docker
-                        image: docker:19.03
-                        command:
+                          image: docker:19.03
+                          command:
                             - cat
-                        tty: true
-                        privileged: true
-                        volumeMounts:
+                          tty: true
+                          privileged: true
+                          volumeMounts:
                             - name: dockersock
-                            mountPath: /var/run/docker.sock
+                              mountPath: /var/run/docker.sock
                         - name: helm
-                        image: lachlanevenson/k8s-helm:v3.1.1
-                        command:
+                          image: lachlanevenson/k8s-helm:v3.1.1
+                          command:
                             - cat
-                        tty: true
+                          tty: true
                     volumes:
                         - name: dockersock
-                        hostPath:
+                          hostPath:
                             path: /var/run/docker.sock
                 '''
         }
     }
-    
+
     stages {
         stage('Docker Build') {
 
