@@ -5,8 +5,8 @@ pipeline {
         VERSION = env.GIT_COMMIT.take(7)
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
-        HELM_REPO = "https://github.com/marwennee/HelmCharts"
-        PROJECT_REPO = "https://github.com/marwennee/front-service"
+        HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
+        PROJECT_REPO = "https://github.com/marwennee/front-service.git"
         HELM_FOLDER = "HelmCharts/helm-front"
         PROJECT_FOLDER = "front-service"
     }
