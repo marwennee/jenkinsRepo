@@ -1,5 +1,8 @@
+String[] folderList
+
 pipeline {
     environment {
+        folders
         helm_back_1="back service 1"
         helm_front="front service"
     }
@@ -10,7 +13,7 @@ pipeline {
             steps {
                 script {
                     String folders = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '")
-                    String[] folderList = folders.split(" ");
+                    folderList = folders.split(" ");
                 }
             }
         }
