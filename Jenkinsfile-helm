@@ -25,7 +25,9 @@ pipeline {
                     folderList.each { folder ->
                         //def jobname = "${env.${folder}}"
                         //echo "${jobname}"
-                        sh "eval 'echo \${env.${folder}}'"
+                    sh '''
+                        eval "echo \${env.${folder}}"
+                    '''
                     }
                 }
             }
