@@ -1,6 +1,7 @@
 pipeline {
     environment {
-        VERSION = env.GIT_COMMIT.take(7)
+        helm-back-1="back service 1"
+        helm-front="front service"
     }
     agent any
 
@@ -8,8 +9,10 @@ pipeline {
         stage('TESTING RESULTS') {
             steps {
                 script {
-                    def folders = sh(returnStdout: true, script: "git show | grep -E ^--- | cut -d / -f2 | tr '\n' ' '")
-                    sh "echo $folders"
+                    def folders = sh(returnStdout: true, script: "git show | grep -E ^--- | cut -d / -f2")
+                    folders.each { item ->
+                        sh "echo Hello ${item}"
+                    }
                 }
             }
         }
