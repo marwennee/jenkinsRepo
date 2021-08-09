@@ -21,12 +21,10 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                    sh(
-                        returnStdout: true, 
-                        script: """
+                    sh """
                         #!bin/bash
                         "folder=${folder}"
-                        """)
+                    """
                     }
                 }
             }
