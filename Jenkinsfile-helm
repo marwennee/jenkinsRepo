@@ -21,11 +21,12 @@ pipeline {
                 script {
 
                     folderList = FOLDERS.split(" ");
-                    sh "eval 'echo \${env.${folder}}'"
-                    /*folderList.each { folder ->
-                        def jobname = "${env.${folder}}"
-                        echo "${jobname}"
-                    }*/
+
+                    folderList.each { folder ->
+                        //def jobname = "${env.${folder}}"
+                        //echo "${jobname}"
+                        sh "eval 'echo \${env.${folder}}'"
+                    }
                 }
             }
         }
