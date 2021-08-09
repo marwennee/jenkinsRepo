@@ -21,7 +21,9 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                        echo "${!folder}"
+                        sh '''
+                          echo "${helm_front}"  
+                        '''
                     }
                 }
             }
