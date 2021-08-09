@@ -8,7 +8,7 @@ pipeline {
         stage('TESTING RESULTS') {
             steps {
                 script {
-                    def folders = sh(returnStdout: true, script: "git show | grep -E '\+\+\+' | cut -d / -f2")
+                    def folders = sh(returnStdout: true, script: "git show | grep -E ^--- | cut -d / -f2")
                     sh "echo $folders"
                 }
             }
