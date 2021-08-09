@@ -21,8 +21,8 @@ pipeline {
             steps {
                 script {
                     folderList = FOLDERS.split(" ");
-                    folderList.each { folder ->
-                        build job: "${${folder}}"
+                    folderList.eachWithIndex { val, idx ->
+                        build job: "${folderList[idx]}"
                     }
                 }
             }
