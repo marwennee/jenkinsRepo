@@ -20,7 +20,7 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                        build job: mapChartToJob[folder], wait: false
+                        build job: mapChartToJob[folder]+"/main", wait: false
                     }
                 }
             }
