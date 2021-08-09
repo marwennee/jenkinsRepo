@@ -1,10 +1,9 @@
 def FOLDERS
-
+def mapChartToJob = [
+  "helm_back_1": "back service 1",
+  "helm_front": "front service",
+]
 pipeline {
-    environment {
-        helm_back_1="back service 1"
-        helm_front="front service"
-    }
     agent any
 
     stages {
@@ -21,10 +20,7 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                    sh """
-                        folder=${folder}
-                        echo ${!folder}
-                    """
+                        echo mapChartToJob["helm_back_1"]
                     }
                 }
             }
