@@ -6,7 +6,7 @@ pipeline {
         REGISTRY = 'marwenguesmii/nodejsapp-2'
         REGISTRY_CREDENTIAL = 'dockerhub'
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
-        HELM_FOLDER = "helm-back-2"
+        HELM_FOLDER = "helm_back_2"
     }
     agent {
         kubernetes {

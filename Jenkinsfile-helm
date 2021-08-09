@@ -1,7 +1,7 @@
 pipeline {
     environment {
-        helm-back-1="back service 1"
-        helm-front="front service"
+        helm_back_1="back service 1"
+        helm_front="front service"
     }
     agent any
 

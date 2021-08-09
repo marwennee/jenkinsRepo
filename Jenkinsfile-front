@@ -6,7 +6,7 @@ pipeline {
         REGISTRY = 'marwenguesmii/angular_nginx'
         REGISTRY_CREDENTIAL = 'dockerhub'
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
-        HELM_FOLDER = "helm-front"
+        HELM_FOLDER = "helm_front"
     }
     agent {
         kubernetes {
