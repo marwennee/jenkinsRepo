@@ -19,10 +19,11 @@ pipeline {
         stage('INVOKING PIPELINES') {
             steps {
                 script {
-                    echo "${env.helm_front}"
+
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-
+                        def jobname = "${env.${folder}}"
+                        echo "${jobname}"
                     }
                 }
             }
