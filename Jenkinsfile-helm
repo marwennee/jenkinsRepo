@@ -2,7 +2,6 @@ def FOLDERS
 
 pipeline {
     environment {
-        folders
         helm_back_1="back service 1"
         helm_front="front service"
     }
