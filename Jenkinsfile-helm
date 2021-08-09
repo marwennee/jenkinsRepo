@@ -1,7 +1,7 @@
 def FOLDERS
 def mapChartToJob = [
   "helm_back_1": "back service 1",
-  "helm_front": "front service",
+  "helm_front": "front_service",
 ]
 pipeline {
     agent any
