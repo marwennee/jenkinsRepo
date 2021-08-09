@@ -20,7 +20,7 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                        echo mapChartToJob["helm_back_1"]
+                        build job: mapChartToJob[${folder}]
                     }
                 }
             }
