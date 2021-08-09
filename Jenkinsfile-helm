@@ -21,8 +21,12 @@ pipeline {
             steps {
                 script {
                     folderList = FOLDERS.split(" ");
+                    def envs = sh(returnStdout: true, script: 'env').split('\n')
+                    envs.each { name  ->
+                        println "Name: $name"
+                    }
                     folderList.eachWithIndex { val, idx ->
-                        build job: "${folderList[idx]}"
+                        echo "${env}"
                     }
                 }
             }
