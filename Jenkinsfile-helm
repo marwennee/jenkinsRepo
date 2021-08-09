@@ -19,15 +19,9 @@ pipeline {
         stage('INVOKING PIPELINES') {
             steps {
                 script {
-
                     folderList = FOLDERS.split(" ");
-
                     folderList.each { folder ->
-                        //def jobname = "${env.${folder}}"
-                        //echo "${jobname}"
-                    sh '''
-                        eval "echo \${env.${folder}}"
-                    '''
+                        echo "${!folder}"
                     }
                 }
             }
