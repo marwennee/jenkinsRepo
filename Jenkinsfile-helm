@@ -11,7 +11,7 @@ pipeline {
         stage('HELM CHARTS TO BE UPDATED') {
             steps {
                 script {
-                    FOLDERS = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '")
+                    FOLDERS = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '").trim()
 
                 }
             }
@@ -22,6 +22,7 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     def envs = sh(returnStdout: true, script: 'env').split('\n')
+                    try{}
                     folderList.each { folder ->
                         println(envs["${folder}"])
                     }
