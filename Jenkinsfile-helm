@@ -12,7 +12,6 @@ pipeline {
             steps {
                 script {
                     FOLDERS = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '").trim()
-
                 }
             }
         }
@@ -20,13 +19,10 @@ pipeline {
         stage('INVOKING PIPELINES') {
             steps {
                 script {
+                    echo "${env.helm_front}"
                     folderList = FOLDERS.split(" ");
-                    def envs = sh(returnStdout: true, script: 'env').split('\n')
-                    envs.each { item ->
-                        echo "${item}"
-                    }
                     folderList.each { folder ->
-                        echo "${folder} test"
+
                     }
                 }
             }
