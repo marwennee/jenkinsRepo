@@ -9,8 +9,8 @@ pipeline {
         stage('TESTING RESULTS') {
             steps {
                 script {
-                    String folders_separatedBy_space = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '")
-                    String[] folderList = title.split(" ");
+                    String folders = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '")
+                    String[] folderList = folders.split(" ");
                     folderList.each { folder ->
                         sh "echo Hello ${folder}"
                     }
