@@ -20,7 +20,7 @@ pipeline {
         stage('INVOKING PIPELINES') {
             steps {
                 script {
-                    folderList = folders.split(" ");
+                    folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
                         build job: "${${folder}}"
                     }
