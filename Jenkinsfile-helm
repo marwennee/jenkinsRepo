@@ -21,8 +21,7 @@ pipeline {
                 script {
                     folderList = FOLDERS.split(" ");
                     folderList.each { folder ->
-                    sh """
-                        #!/bin/bash
+                    sh """#!/bin/bash
                         folder=${folder}
                         echo ${!folder}
                     """
