@@ -19,7 +19,6 @@ multibranchPipelineJob('back_service_1') {
                         userRemoteConfig {
                             name('origin')
                             url('https://github.com/marwennee/jenkinsRepo')
-                            refspec("+refs/heads/main:refs/remotes/origin/main")
                             credentialsId('github')
                         }
                     }
