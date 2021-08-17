@@ -28,6 +28,8 @@ multibranchPipelineJob('back_service_1') {
                         name('main')
                         }
                     }
+                    browser {} // required, but doesn't require configuration
+                    gitTool('/usr/bin/env git')
                 }
             }
         }
