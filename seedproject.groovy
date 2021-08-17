@@ -1,10 +1,4 @@
 multibranchPipelineJob('back_service_1') {
-    factory {
-        workflowBranchProjectFactory {
-            scriptPath('./jenkinsfile-back-1')
-        }
-    }
-
     branchSources {
         branchSource {
             source {
@@ -15,4 +9,28 @@ multibranchPipelineJob('back_service_1') {
             }
         }
     }
+    factory {
+        remoteJenkinsFileWorkflowBranchProjectFactory {
+            remoteJenkinsFile('jenkinsfile-back-1')
+            localMarker('') 
+            remoteJenkinsFileSCM {
+                gitSCM {
+                    userRemoteConfigs	{
+                        userRemoteConfig {
+                            name('origin')
+                            url('https://github.com/marwennee/jenkinsRepo')
+                            refspec("+refs/heads/main:refs/remotes/origin/main")
+                            credentialsId('github')
+                        }
+                    }
+                    branches {
+                        branchSpec {
+                        name('main')
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
