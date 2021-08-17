@@ -15,10 +15,11 @@ multibranchPipelineJob('back_service_1') {
             localMarker('') 
             remoteJenkinsFileSCM {
                 gitSCM {
-                    userRemoteConfigs	{
+                    userRemoteConfigs {
                         userRemoteConfig {
                             name('origin')
                             url('https://github.com/marwennee/jenkinsRepo')
+                            refspec("+refs/heads/*:refs/remotes/origin/*")
                             credentialsId('github')
                         }
                     }
