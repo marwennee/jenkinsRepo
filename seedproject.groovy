@@ -11,7 +11,7 @@ multibranchPipelineJob('back_service_1') {
     }
     factory {
         remoteJenkinsFileWorkflowBranchProjectFactory {
-            remoteJenkinsFile('jenkinsfile-back-1')
+            remoteJenkinsFile('Jenkinsfile-back-1')
             localMarker('') 
             remoteJenkinsFileSCM {
                 gitSCM {
