@@ -5,6 +5,10 @@ multibranchPipelineJob('back_service_1') {
               gitSCMSource {
                 remote('https://github.com/marwennee/back-service-1')
                 credentialsId('github')
+                traits {
+                    gitBranchDiscovery()
+                    gitTagDiscovery() // if you need tag discovery
+                }
               }
             }
         }
