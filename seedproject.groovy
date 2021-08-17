@@ -41,7 +41,7 @@ multibranchPipelineJob('back_service_1') {
 
 }
 
-multibranchPipelineJob('back_service_1') {
+multibranchPipelineJob('back_service_2') {
     branchSources {
         branchSource {
             source {
