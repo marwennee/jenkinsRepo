@@ -13,13 +13,6 @@ multibranchPipelineJob('back_service_1') {
                 credentialsId('github')
               }
             }
-            buildStrategies {
-                buildAllBranches {
-                    strategies {
-                        skipInitialBuildOnFirstBranchIndexing()
-                    }
-                }
-            }
         }
     }
 }
