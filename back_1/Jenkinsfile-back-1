@@ -2,7 +2,7 @@ pipeline {
     environment {
         NAME = "back--svc--1"
         NAMESPACE = "testing"
-        VERSION = env.GIT_COMMIT.take(7)
+        VERSION = "2"
         REGISTRY = 'marwenguesmii/nodejsapp'
         REGISTRY_CREDENTIAL = 'dockerhub'
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
