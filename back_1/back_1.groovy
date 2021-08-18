@@ -1,4 +1,3 @@
-# groovy file
 pipelineJob('back_service_1') {
   properties{
     githubProjectUrl('https://github.com/marwennee/back-service-1')
