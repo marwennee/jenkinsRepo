@@ -19,7 +19,7 @@ pipelineJob('back_service_1') {
   }
   definition {
     cps {
-      script(readFileFromWorkspace('./Jenkinsfile-back-1'))
+      script(readFileFromWorkspace('./back_1/Jenkinsfile-back-1'))
       sandbox()    
     }
   }
