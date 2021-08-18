@@ -51,6 +51,7 @@ pipeline {
 
         stage('K8S') {
             steps {
+                sh "kubectl get all"
                 withKubeConfig([credentialsId: "kubeconfig", serverUrl:"https://192.168.99.101:8443"]) {
                     sh "kubectl get all"
                 }
