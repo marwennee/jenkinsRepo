@@ -49,6 +49,14 @@ pipeline {
             }
         }
 
+        stage('K8S') {
+            steps {
+                withKubeConfig([credentialsId: "7d41e111-ccd9-422f-9bec-937a4cefcbdf"]) {
+                    sh "kubectl get all"
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 container('docker') {
