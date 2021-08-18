@@ -2,6 +2,7 @@ pipeline {
     environment {
         NAME = "back--svc--1"
         NAMESPACE = "testing"
+        PROJECT ="marwennee/back-service-1.git"
         VERSION = "2"
         REGISTRY = 'marwenguesmii/nodejsapp'
         REGISTRY_CREDENTIAL = 'dockerhub'
@@ -36,12 +37,15 @@ pipeline {
     }
 
     stages {
-
-        stage('CHECK') {
+        stage('Checkout') {
             steps {
-                script {
-                    sh "printenv"
-                }
+                checkout([$class: 'GitSCM',
+                branches: [[name: '*/main']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [[$class: 'CheckoutOption', timeout: 23], [$class: 'CloneOption', noTags: true, reference: '', shallow: false, timeout: 90]] ,
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'github',
+                url: "https://www.github.com/$PROJECT"]]])
             }
         }
 
