@@ -37,7 +37,7 @@ pipeline {
 
     stages {
 
-        stage('Docker Build') {
+        stage('CHECK') {
             steps {
                 script {
                     sh "printenv"
