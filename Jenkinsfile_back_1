@@ -52,24 +52,19 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Build & Publish') {
             steps {
+                script {
+                    withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
+                        def image = docker.build("${REGISTRY}:${VERSION}")
+                        image.push()
+                    }
+                }
                 container('docker') {
                     sh "docker build -t ${REGISTRY}:${VERSION} ."
                 }
             }
         }
-
-        stage('Docker Publish') {
-            steps {
-                container('docker') {
-                    withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
-                        sh "docker push ${REGISTRY}:${VERSION}"
-                    }
-                }
-            }
-        }
-
         stage('Checkout SCM: HELM CHART'){
             steps {
                 checkout(scm: [
