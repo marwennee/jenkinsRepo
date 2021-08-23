@@ -9,33 +9,6 @@ pipeline {
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
         HELM_FOLDER = "helm_back_1"
     }
-    agent {
-        kubernetes {
-            yaml '''
-                spec:
-                    containers:
-                        - name: docker
-                          image: docker:19.03
-                          command:
-                            - cat
-                          tty: true
-                          privileged: true
-                          volumeMounts:
-                            - name: dockersock
-                              mountPath: /var/run/docker.sock
-                        - name: helm
-                          image: alpine/helm:3.6.3
-                          command:
-                            - cat
-                          tty: true
-                    volumes:
-                        - name: dockersock
-                          hostPath:
-                            path: /var/run/docker.sock
-                '''
-        }
-    }
-
     stages {
         stage('Checkout') {
             steps {
