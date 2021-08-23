@@ -11,21 +11,7 @@ pipeline {
     }
     agent {
         kubernetes {
-            yaml '''
-                spec:
-                    containers:
-                        - name: docker
-                          image: docker:19.03
-                          command:
-                            - cat
-                          tty: true
-                          privileged: true
-                        - name: helm
-                          image: alpine/helm:3.6.3
-                          command:
-                            - cat
-                          tty: true
-                '''
+            label "slave"
         }
     }
 
@@ -54,6 +40,7 @@ pipeline {
 
         stage('Docker Build & Publish') {
             steps {
+
                 container('docker') {
                     sh "docker build -t ${REGISTRY}:${VERSION} ."
                 }
