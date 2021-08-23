@@ -1,4 +1,4 @@
-pipelineJob('back_service_1') {
+pipelineJob('elyadata/back_service_1') {
   properties{
     githubProjectUrl('https://github.com/marwennee/back-service-1')
     pipelineTriggers{
