@@ -9,6 +9,12 @@ pipeline {
         HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
         HELM_FOLDER = "helm_back_1"
     }
+    agent {
+        kubernetes {
+            label jenkins-slave
+        }
+    }
+
     stages {
         stage('Checkout') {
             steps {
