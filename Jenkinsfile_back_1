@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
-                        def app = docker.build ${REGISTRY}:${VERSION}
+                        def app = docker.build "${REGISTRY}:${VERSION}"
                         app.push()
                     }
                     
