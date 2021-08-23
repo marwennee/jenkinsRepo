@@ -1,24 +1,15 @@
 pipeline {
     environment {
-        NAME = "back--svc--1"
-        NAMESPACE = "testing"
+        DEPLOY="sample-nodejs"
+        KS8_NAMESPACE="testing"
         PROJECT ="marwennee/back-service-1.git"
-        VERSION = "2"
-        REGISTRY = 'marwenguesmii/nodejsapp'
-        REGISTRY_CREDENTIAL = 'dockerhub'
-        HELM_REPO = "https://github.com/marwennee/HelmCharts.git"
-        HELM_FOLDER = "helm_back_1"
+        REGISTRY = "marwenguesmii/nodejsapp"
     }
     agent {
         kubernetes {
             yaml '''
                 spec:
                     containers:
-                        - name: helm
-                          image: alpine/helm:3.6.3
-                          command:
-                            - cat
-                          tty: true
                         - name: kaniko
                           image: gcr.io/kaniko-project/executor:debug
                           imagePullPolicy: Always
@@ -41,7 +32,6 @@ pipeline {
                 '''
         }
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -55,49 +45,22 @@ pipeline {
             }
         }
 
-        stage('K8S') {
-            steps {
-                withKubeConfig([credentialsId: "kubeconfig"]) {
-                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.7/bin/linux/amd64/kubectl"'  
-                    sh 'chmod u+x ./kubectl'  
-                    sh './kubectl get pods'
-                }
-            }
-        }
-
         stage('Docker Build & Publish') {
             steps {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                     sh '''#!/busybox/sh
-                        /kaniko/executor --context `pwd` --destination marwenguesmii/hello-kaniko:kaniko
+                        /kaniko/executor --context `pwd` --destination $REGISTRY
                     '''
                 }
             }
         }
-        stage('Checkout SCM: HELM CHART'){
-            steps {
-                checkout(scm: [
-                    $class: 'GitSCM', branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: "${HELM_REPO}", name: "origin", credentialsId:'github']]
-                ])
-            }
-        }
-
         stage('Kubernetes Deploy') {
             steps {
-                container('helm') {
-                    script {
-                        try {
-                            sh "helm upgrade --set image.tag=${VERSION} -n ${NAMESPACE}  ${NAME} ./${HELM_FOLDER}"
-                        } catch( Exception e){
-                            sh "helm install --replace --set image.tag=${VERSION} --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ./${HELM_FOLDER}"
-                        }
-                    }
-                    
-                }
-            }
-        }        
-
-
-    }
+                withKubeConfig([credentialsId: "kubeconfig"]) {
+                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.7/bin/linux/amd64/kubectl"'  
+                    sh 'chmod u+x ./kubectl'  
+                    sh "kubectl -n $KS8_NAMESPACE rollout restart deployment/$DEPLOY"
+                } 
+            }        
+        }
 }
