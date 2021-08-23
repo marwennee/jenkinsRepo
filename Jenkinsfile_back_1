@@ -54,9 +54,12 @@ pipeline {
 
         stage('Docker Build & Publish') {
             steps {
-
-                container('docker') {
-                    sh "docker build -t ${REGISTRY}:${VERSION} ."
+                script {
+                    withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
+                        def app = docker.build ${REGISTRY}:${VERSION}
+                        app.push()
+                    }
+                    
                 }
             }
         }
