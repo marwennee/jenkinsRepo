@@ -1,0 +1,55 @@
+pipeline {
+    environment {
+        NAME = "back--svc--2"
+        NAMESPACE = "testing"
+        IMAGE_NAME = "nodejsapp-2"
+        REGISTRY_CREDENTIAL = "dockerhub"
+        CONTAINER_REGISTRY = ""
+        PROJECT=""
+        GIT_CRED=""
+    }
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: '*/main']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [[$class: 'CheckoutOption', timeout: 23], [$class: 'CloneOption', noTags: true, reference: '', shallow: false, timeout: 90]] ,
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '$GIT_CRED',
+                url: "https://www.github.com/$PROJECT"]]])
+            }
+        }
+
+        stage('Docker Build') {
+            
+            steps {
+                sh label: 'Build Image', script: "docker build -t ${CONTAINER_REGISTRY}/${IMAGE_NAME}:latest ."    
+            }
+
+        }
+
+        stage('Docker Publish') {
+
+            steps {
+                withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: "${CONTAINER_REGISTRY}"]) {
+                    sh label: 'Push Image to ACR', script: "docker push ${CONTAINER_REGISTRY}/${IMAGE_NAME}:latest"
+                }
+            }
+
+        }
+
+        stage('Kubernetes Deploy') {
+            steps {
+                withKubeConfig([credentialsId: "$KS8_CONFIG_NAME"]) {
+                    sh label: 'Restart Deployment', script: "kubectl -n $KS8_NAMESPACE rollout restart deployment/$DEPLOY"
+                } 
+            }        
+        }
+
+
+    }
+}

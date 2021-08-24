@@ -5,6 +5,7 @@ pipeline {
         PROJECT ="marwennee/back-service-1.git"
         REGISTRY = "marwenguesmii/nodejsapp"
         KS8_CONFIG_NAME = "kubeconfig"
+        GIT_CRED = "github"
     }
     agent {
         kubernetes {
@@ -41,7 +42,7 @@ pipeline {
                 doGenerateSubmoduleConfigurations: false,
                 extensions: [[$class: 'CheckoutOption', timeout: 23], [$class: 'CloneOption', noTags: true, reference: '', shallow: false, timeout: 90]] ,
                 submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: 'github',
+                userRemoteConfigs: [[credentialsId: '$GIT_CRED',
                 url: "https://www.github.com/$PROJECT"]]])
             }
         }

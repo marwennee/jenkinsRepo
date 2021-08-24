@@ -1,42 +1,26 @@
-multibranchPipelineJob('back_service_2') {
-    branchSources {
-        branchSource {
-            source {
-              gitSCMSource {
-                remote('https://github.com/marwennee/back-service-2')
-                credentialsId('github')
-                traits {
-                    gitBranchDiscovery()
-                    gitTagDiscovery() 
-                }
-              }
-            }
-        }
+pipelineJob('back_service_2') {
+  properties{
+    githubProjectUrl('https://github.com/marwennee/back-service-2')
+    pipelineTriggers{
+      triggers {
+        githubPush()
+      }
     }
-    factory {
-        remoteJenkinsFileWorkflowBranchProjectFactory {
-            remoteJenkinsFile('Jenkinsfile-back-2')
-            localMarker('') 
-            remoteJenkinsFileSCM {
-                gitSCM {
-                    userRemoteConfigs {
-                        userRemoteConfig {
-                            name('origin')
-                            url('https://github.com/marwennee/jenkinsRepo')
-                            refspec("+refs/heads/*:refs/remotes/origin/*")
-                            credentialsId('github')
-                        }
-                    }
-                    branches {
-                        branchSpec {
-                        name('main')
-                        }
-                    }
-                    browser {} 
-                    gitTool('/usr/bin/env git')
-                }
-            }
-        }
+    buildDiscarder {
+      strategy {
+          logRotator {
+              daysToKeepStr("5")
+              numToKeepStr("3")
+              artifactDaysToKeepStr("0")
+              artifactNumToKeepStr("0")
+          }
+      }
     }
-
+  }
+  definition {
+    cps {
+      script(readFileFromWorkspace('./Jenkinsfile_back_two_vm'))
+      sandbox()    
+    }
+  }
 }
