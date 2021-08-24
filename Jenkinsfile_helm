@@ -5,6 +5,7 @@ pipeline {
         WORKSPACE="./"
         NAMESPACE="testing"
         NAME="wavesproject"
+        KS8_CONFIG_NAME="kubeconfig"
     }
 
     agent {
@@ -37,11 +38,13 @@ pipeline {
         stage('Helm Chart Deploy') {
             steps {
                 container('helm') {
-                    script {
-                        try {
-                            sh "helm upgrade -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
-                        } catch( Exception e){
-                            sh "helm install --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                    withKubeConfig([credentialsId: "$KS8_CONFIG_NAME"]) {
+                        script {
+                            try {
+                                sh "helm upgrade -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                            } catch( Exception e){
+                                sh "helm install --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                            }
                         }
                     }
                 }
