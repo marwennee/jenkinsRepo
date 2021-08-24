@@ -1,13 +1,23 @@
 pipeline {
     environment {
+
+        PROJECT=""
+        GIT_CRED=""
+
         NAME = "back--svc--2"
         NAMESPACE = "testing"
+
         IMAGE_NAME = "nodejsapp-2"
         REGISTRY_CREDENTIAL = "dockerhub"
         CONTAINER_REGISTRY = ""
-        PROJECT=""
-        GIT_CRED=""
+
+
+        KS8_CONFIG_NAME=""
+        KS8_NAMESPACE=""
+        DEPLOY=""
+
     }
+    
     agent any
 
     stages {

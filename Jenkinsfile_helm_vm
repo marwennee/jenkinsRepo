@@ -1,0 +1,41 @@
+pipeline {
+    environment {
+        PROJECT="marwennee/helm.git"
+        VERSION="latest"
+        WORKSPACE="./"
+        NAMESPACE="testing"
+        NAME="wavesproject"
+        KS8_CONFIG_NAME="kubeconfig"
+    }
+
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: '*/main']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [[$class: 'CheckoutOption', timeout: 23], [$class: 'CloneOption', noTags: true, reference: '', shallow: false, timeout: 90]] ,
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'github',
+                url: "https://www.github.com/$PROJECT"]]])
+            }
+        }
+
+        stage('Helm Chart Deploy') {
+            steps {
+                withKubeConfig([credentialsId: "$KS8_CONFIG_NAME"]) {
+                    script {
+                        try {
+                            sh "helm upgrade -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                        } catch( Exception e){
+                            sh "helm install --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
