@@ -19,7 +19,7 @@ pipelineJob('helm') {
   }
   definition {
     cps {
-      script(readFileFromWorkspace('./Jenkinsfile_helm_vm'))
+      script(readFileFromWorkspace('./Jenkinsfile_helm_pod'))
       sandbox()    
     }
   }
