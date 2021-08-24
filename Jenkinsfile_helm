@@ -4,7 +4,7 @@ pipeline {
         VERSION="latest"
         WORKSPACE="./"
         NAMESPACE="testing"
-        NAME="waves_project"
+        NAME="wavesproject"
     }
 
     agent {
@@ -44,7 +44,6 @@ pipeline {
                             sh "helm install --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
                         }
                     }
-                    
                 }
             }
         }
