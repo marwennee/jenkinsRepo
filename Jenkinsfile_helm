@@ -4,7 +4,7 @@ pipeline {
         VERSION="latest"
         WORKSPACE="./"
         NAMESPACE="testing"
-        NAME="waves"
+        NAME="waves_project"
     }
 
     agent {
