@@ -1,31 +1,53 @@
-def FOLDERS
-def mapChartToJob = [
-  "helm_back_1": "back_service_1",
-  "helm_front": "front_service",
-  "helm_back_2": "back_service_2",
-]
 pipeline {
-    agent any
+    environment {
+        PROJECT="marwennee/helm.git"
+        VERSION="latest"
+        WORKSPACE="./"
+        NAMESPACE="testing"
+        NAME="elyadataProject"
+    }
+
+    agent {
+        kubernetes {
+            yaml '''
+                spec:
+                    containers:
+                        - name: helm
+                          image: alpine/helm:3.6.3
+                          command:
+                            - cat
+                          tty: true
+                '''
+        }
+    }
 
     stages {
-        stage('HELM CHARTS TO BE UPDATED') {
+        stage('Checkout') {
             steps {
-                script {
-                    FOLDERS = sh(returnStdout: true, script: "git show | grep -o b/.*/ | cut -d / -f2 | uniq | tr '\n' ' '").trim()
-                }
+                checkout([$class: 'GitSCM',
+                branches: [[name: '*/main']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [[$class: 'CheckoutOption', timeout: 23], [$class: 'CloneOption', noTags: true, reference: '', shallow: false, timeout: 90]] ,
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'github',
+                url: "https://www.github.com/$PROJECT"]]])
             }
         }
 
-        stage('INVOKING PIPELINES') {
+        stage('Helm Chart Deploy') {
             steps {
-                script {
-                    folderList = FOLDERS.split(" ");
-                    folderList.each { folder ->
-                        build job: mapChartToJob[folder]+"/main", wait: false
+                container('helm') {
+                    script {
+                        try {
+                            sh "helm upgrade -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                        } catch( Exception e){
+                            sh "helm install --set metadata.namespace=${NAMESPACE} --create-namespace -n ${NAMESPACE}  ${NAME} ${WORKSPACE}"
+                        }
                     }
+                    
                 }
             }
         }
-      
+        
     }
 }

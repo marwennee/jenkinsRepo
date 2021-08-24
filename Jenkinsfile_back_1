@@ -4,6 +4,7 @@ pipeline {
         KS8_NAMESPACE="testing"
         PROJECT ="marwennee/back-service-1.git"
         REGISTRY = "marwenguesmii/nodejsapp"
+        KS8_CONFIG_NAME = "kubeconfig"
     }
     agent {
         kubernetes {
@@ -56,7 +57,7 @@ pipeline {
         }
         stage('Kubernetes Deploy') {
             steps {
-                withKubeConfig([credentialsId: "kubeconfig"]) {
+                withKubeConfig([credentialsId: "$KS8_CONFIG_NAME"]) {
                     sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.7/bin/linux/amd64/kubectl"'  
                     sh 'chmod u+x ./kubectl'  
                     sh "./kubectl -n $KS8_NAMESPACE rollout restart deployment/$DEPLOY"
